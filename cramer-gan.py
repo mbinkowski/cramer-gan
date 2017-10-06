@@ -1,4 +1,4 @@
-import os
+import os, sys
 import time
 import argparse
 import importlib
@@ -129,6 +129,9 @@ class CramerGAN(object):
                 bx = xs.data2img(bx)
                 bx = grid_transform(bx, xs.shape)
                 imsave('logs_{}/{}/{}.png'.format(self.config.loss, self.data, t/100), bx)
+                
+                if config.log > 0:
+                    sys.stdout.flush()
 
 
 if __name__ == '__main__':
