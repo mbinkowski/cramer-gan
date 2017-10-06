@@ -80,9 +80,9 @@ class CramerGAN(object):
 
         self.d_adam, self.g_adam = None, None
         with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
-            self.d_adam = tf.train.AdamOptimizer(learning_rate=1e-4, beta1=0.5, beta2=0.9)\
+            self.d_adam = tf.train.AdamOptimizer(learning_rate=1e-5, beta1=0.5, beta2=0.9)\
                 .minimize(self.d_loss, var_list=self.d_net.vars)
-            self.g_adam = tf.train.AdamOptimizer(learning_rate=1e-4, beta1=0.5, beta2=0.9)\
+            self.g_adam = tf.train.AdamOptimizer(learning_rate=1e-5, beta1=0.5, beta2=0.9)\
                 .minimize(self.g_loss, var_list=self.g_net.vars)
 
         gpu_options = tf.GPUOptions(allow_growth=True)
@@ -137,9 +137,13 @@ if __name__ == '__main__':
     parser.add_argument('--model', type=str, default='dcgan')
     parser.add_argument('--gpus', type=str, default='0')
     parser.add_argument('--loss', type=str, default='cramer')
+    parser.add_argument('--log', type=str, default='')
     parser.add_argument('--gp_rate', type=float, default=0.0)
     parser.add_argument('--batch_size', type=int, default=128)
     args = parser.parse_args()
+    if len(args.log) > 0:
+        sys.stdout = args.log
+        sys.stderr = args.log
     try:
         os.makedirs('logs_{}/{}'.format(args.loss, args.data))
     except Exception:
